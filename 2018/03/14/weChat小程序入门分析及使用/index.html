@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Blogs-技术栈">
 <meta property="og:description" content="微信小程序 相关地址  小程序开发文档  前言  &amp;emsp;&amp;emsp;这是小程序入门基础篇，要学习一门新的技术首先要对它整体有一个简单的了解。微信小程序是寄生在微信App里面，微信拥有的功能大部分对小程序是开放的，可以在小程序里面任意调用微信原生API。开发者工具的使用以及安装请参考官方文档进行安装。&amp;emsp;&amp;emsp;如果你想快速掌握小程序，下面你就应该走走心了！我主要从下面几个方面介绍">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-02T02:12:22.642Z">
+<meta property="og:updated_time" content="2018-05-08T13:32:09.350Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="weChat小程序入门分析及使用">
 <meta name="twitter:description" content="微信小程序 相关地址  小程序开发文档  前言  &amp;emsp;&amp;emsp;这是小程序入门基础篇，要学习一门新的技术首先要对它整体有一个简单的了解。微信小程序是寄生在微信App里面，微信拥有的功能大部分对小程序是开放的，可以在小程序里面任意调用微信原生API。开发者工具的使用以及安装请参考官方文档进行安装。&amp;emsp;&amp;emsp;如果你想快速掌握小程序，下面你就应该走走心了！我主要从下面几个方面介绍">
@@ -393,7 +393,7 @@
 </blockquote>
 <p>&emsp;&emsp;这是小程序入门基础篇，要学习一门新的技术首先要对它整体有一个简单的了解。微信小程序是寄生在微信App里面，微信拥有的功能大部分对小程序是开放的，可以在小程序里面任意调用微信原生API。开发者工具的使用以及安装请参考官方文档进行安装。<br>&emsp;&emsp;如果你想快速掌握小程序，下面你就应该走走心了！我主要从下面几个方面介绍。</p>
 <p>一、小程序的文件结构：<br>&emsp;&emsp;小程序主要由三个构造器函数生成，<code>App()</code> 函数用来注册小程序、<code>Page()</code> 函数用来注册页面、<code>Component()</code> 函可用来定义组件。一个小程序只需要有一个 <code>App()</code> 函数，可以有一个或者多个 <code>Page()</code> 和 <code>Component()</code> 函数。</p>
-<p>二、一个小程序主体部分由三个文件组成，必须放在项目的根目录，如下：<br>&emsp;&emsp;<code>app.js</code> 小程序逻辑、<code>app.json</code> 小程序公共设置、<code>app.wxss</code> 小程序公共样式表。</p>
+<p>二、一个小程序主体部分由三个文件组成，必须放在项目的根目录，如下：<br>&emsp;&emsp;<code>app.js</code> 小程序主逻辑生命周期、首次授权验证、<code>app.json</code> 小程序公共设置、<code>app.wxss</code> 小程序公共样式表。</p>
 <p>三、一个小程序页面由四个文件组成，分别是：<br>&emsp;&emsp;<code>.js</code> 页面逻辑、<code>.wxml</code> 页面结构、<code>.wxss</code> 页面样式表、<code>.json</code> 页面配置。<br>这里我已经把小程序里面主要文件以及组成罗列出来了，下面我们就对应各类型的文件来详细讲解。</p>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><blockquote>
 <h4 id="app-json配置信息"><a href="#app-json配置信息" class="headerlink" title="app.json配置信息"></a>app.json配置信息</h4></blockquote>
