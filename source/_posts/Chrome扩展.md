@@ -14,7 +14,7 @@ tags:
 
 &emsp;&emsp;Chrome扩展程序必须包含一个maniest.json文件，这个文件的文件名固定为manifest.json。Chrome扩展的manifest.json必须包含 `name`、`version` 和 `manifest_version` 属性，目前来说manifest_version属性值只能为数字2，[ 对于Chrome应用来说，还必须包含app属性 ]。
 
-manifest.json
+manifest.json 内容详解
 ```
     {
         "name": "IDSC 工作助手",
@@ -22,6 +22,7 @@ manifest.json
         "manifest_version": 2
         "description": "灵活可配、辅助审核、快捷操作、提能增效。",
         "permissions": [
+            "desc": "扩展程序权限配置",
             "declarativeContent",
             "storage",
             "contextMenus",
@@ -32,17 +33,22 @@ manifest.json
             "notifications"
         ],
         "background": {
+             "desc": "Chrome扩展后台常住页面,会一直常驻的后台JS或后台页面",
+            //"page": "background.html",
             "scripts": [
                 "lib/jquery-3.3.1.js",
                 "config.js",
                 "backgroundCommon.js",
                 "background.js"
             ],
-            "persistent": true
+            "persistent": true    //需要时加载，在空闲时被关闭，什么叫被需要时呢？比如第一次安装、插件更新、有content-script向它发送消息，等等。
         },
-        "options_ui": {
+        "options_page": "options.html",     //Chrome40以前的写法
+        "options_ui": {     //Chrome40以后的写法
+            "desc": "右击扩展图标，点击选项按钮",
             "page": "options.html",
-            "open_in_tab": true
+            "open_in_tab": true,    // 默认打开的样式，是否新建tabs窗口，true为新建窗口，false为新特性弹层
+            "chrome_style": true    // 添加一些默认的样式，推荐使用
         },
         "browser_action": {
             "default_title": "IDSC 工作助手",
