@@ -115,6 +115,78 @@ import { createStore } from 'redux'
 const store = createStore(reducer)
 ```
 
+#### combineReducers
+reducer函数负责生成State。由于整个应用只有一个State对象，包含所有数据，杜宇大型应用来说，整个State必然十分庞大，导致Reducer函数也十分庞大。
+```
+const chatReducer = (state = defaultState,action={}) => {
+    const { type,payload } = action;
+    switch(type){
+        case ADD_CHAT:
+            return Object.assign({},state,{ chatLog:state.chatLog.concat(payload) })
+        case CHANGE_STATUS:
+            return Object.assign({},state,{ statusMessage:payload })
+        case CHANGE_USERNAME:
+            return Object.assign({},state,{ userName:payload })
+        default:
+            return state;
+    }
+}
+```
+上面代码中，三种Action分别改变State的三个属性
+```
+· ADD_CHAT: chatLog属性
+· CHANGE_STATUS: statusMessage属性
+· CHANGE_USERNAME: userName属性
+```
+这三个属性之间没有联系，这提示我们可以把Reducer函数拆分。不同的函数负责处理不同属性，最终把他们合并成一个大Reducer即可。
+```
+const chatReducer = (state = defaultState,action={}) => {
+    return {
+        chatLog: chatLog(state.chatLog,action),
+        statusMessage: statusMessage(state.statusMessage,action),
+        userName: userNmae(state.userName,action)
+    }
+}
+```
+上面代码中，Reducer函数被拆成了三个小函数，每一个负责生成对应的属性。
+这样一拆，Reducer就易读易写多了，而且，这种拆分于React应用的结构吻合：一个React跟组件由很多子组件构成。这就是说，子组件与子Reducer完全可以对应。
+Redux提供了一个`combineReducers`方法，用于Reducer的拆分。你只要定义各个子Reducer函数，然后用这个方法，将他们合成一个大Reducer。
+```
+import { combineReducers } from 'redux'
+const chatReducer = combineReducers({
+    chatLog,
+    statusMessage,
+    userName
+})
+export default todoApp
+```
+上面的代码通过`combineReducers`方法将三个子Reducer合并成一个大的函数。
+这种写法有一个前提，就是state的属性名必须与子Reducer同名。如果不同名，就要采用下面的写法
+```
+const reducer = combineReducers({
+    a: doSomethingWitchA,
+    b: processB
+    c: c
+})
+
+==>
+
+function reducer(state={},action){
+    return {
+        a: doSomethingWithA(stats.a,action),
+        b: processB(state.b,action),
+        c: c(state.c,action)
+    }
+}
+```
+你可以把所有的子Reducer放在一个文件里面，然后统一引入
+```
+import { combnineReducers } from 'redux'
+import * as reducers from './reducers'
+
+const reducer = combineReducers(reducers)
+```
+
 ### Redux流程图
 
 <img title="redux流程图" src="http://www.ruanyifeng.com/blogimg/asset/2016/bg2016091802.jpg" width="400"/>
