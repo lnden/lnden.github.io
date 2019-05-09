@@ -26,6 +26,67 @@ tags:
 
 ### onbeforeunload 事件
 
+- 定义
 
+&emsp;&emsp;onbeforeunload事件在即将离开当前页面(刷新或关闭)时触发。
+
+该事件可以用于弹出对话框，提示用户是继续浏览页面还是离开当前页面。return '是否关闭'对话默认的提示信息根据不同的浏览器有所不同，标准的信息类似"确定要离开此页面吗?"，该信息不能被删除。
+
+- 使用方法
+
+```
+window.onbeforeunload = (e) => {
+    return '在关闭之前会有提示信息'
+}
+
+window.addEventListener("beforeunload", (e) => {
+    e.returnValue = '在关闭之前会有提示信息出现'
+})
+```
+
+用户在当前页面停留时长的业务
+```
+(function(){
+    const startTime = Math.ceil(new Date().getTime()/1000);
+    const getDuration = () => {
+        let time = '',
+            hours = 0,
+            minutes = 0,
+            seconds = 0,
+            endTime = Math.ceil(new Date().getTime()/1000),
+            duration = endTime - startTime;
+            
+        hours = Math.floor(duration/3600);  //停留小时数
+        minutes = Math.floor(duration % 3600/60);   //停留分钟数
+        seconds = Math.floor(duration % 3600 % 60); //停留秒数
+        
+        time = (hours < 10 ? '0'+hours : hours) + ':' +
+             (minutes < 10 ? '0'+minutes : minutes) + ':' + 
+             (seconds < 10 ? '0'+seconds : seconds);
+        return time;
+    }
+    
+    window.onbeforeunload = (e) => {
+        var duration = getDuration()
+        
+        //request(duration)
+    }
+})()
+
+```
 
 ### onunload 事件
+
+- 定义
+
+onunload 属性会在页面卸载时触发 (或者浏览器窗口已经关闭)
+
+- 使用方法
+
+# 我是一级
+
+## 我是二级
+
+### 我是三级
+
+> 我是引入其他的资源
