@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言&amp;emsp;&amp;emsp;在前端 提起 WebSocket 你可能会联想到聊天室这样实时通信的应用。一副高大上的样子。面试的时候面试官问你知道 WebSocket 吗？又是一脸懵逼的样子，项目中没使用过。但是我自己了解过，是一个可以主动向客户端发起请求的一个H5协议。没关系！谁还不是从[新人]=&amp;gt;[大牛]一步一步走过来的。如果你对WebSocket还有疑惑让我们来一起学习它！  学习一门技">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebSocket简介">
+<meta property="og:url" content="http://yoursite.com/2018/11/16/Websocket简介/index.html">
+<meta property="og:site_name" content="Blogs-技术栈">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;在前端 提起 WebSocket 你可能会联想到聊天室这样实时通信的应用。一副高大上的样子。面试的时候面试官问你知道 WebSocket 吗？又是一脸懵逼的样子，项目中没使用过。但是我自己了解过，是一个可以主动向客户端发起请求的一个H5协议。没关系！谁还不是从[新人]=&amp;gt;[大牛]一步一步走过来的。如果你对WebSocket还有疑惑让我们来一起学习它！  学习一门技">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-09T13:16:23.295Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WebSocket简介">
+<meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;在前端 提起 WebSocket 你可能会联想到聊天室这样实时通信的应用。一副高大上的样子。面试的时候面试官问你知道 WebSocket 吗？又是一脸懵逼的样子，项目中没使用过。但是我自己了解过，是一个可以主动向客户端发起请求的一个H5协议。没关系！谁还不是从[新人]=&amp;gt;[大牛]一步一步走过来的。如果你对WebSocket还有疑惑让我们来一起学习它！  学习一门技">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/16/Websocket简介/">
+
+
+
+
+
+  <title>WebSocket简介 | Blogs-技术栈</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d3fd07fa09a90d143aee5302d68a51c8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <style>
+    .forkme{
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .forkme{
+        display: inline;
+      }
+    }
+  </style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <div class="forkme">
+      <a href="https://github.com/lnden">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+      </a>
+    </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blogs-技术栈</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/16/Websocket简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnden">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blogs-技术栈">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">WebSocket简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-16T09:47:20+08:00">
+                2018-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>&emsp;&emsp;在前端 提起 WebSocket 你可能会联想到聊天室这样实时通信的应用。一副高大上的样子。面试的时候面试官问你知道 WebSocket 吗？又是一脸懵逼的样子，项目中没使用过。但是我自己了解过，是一个可以主动向客户端发起请求的一个H5协议。没关系！谁还不是从[新人]=&gt;[大牛]一步一步走过来的。如果你对WebSocket还有疑惑让我们来一起学习它！</p>
+<blockquote>
+<p>学习一门技术，你一定认真的思考下面几点：<br>&emsp;&emsp;1.它是干什么的？<br>&emsp;&emsp;2.它的优点是什么？<br>&emsp;&emsp;3.它的缺点是什么？</p>
+</blockquote>
+<p>我们先来了解一下WebSocket及它的优缺点<br>&emsp;&emsp;WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。(说白了就是没出现WebSocket之前，服务端是没办法主动给客户端发起通信的，只能由客户端定时向服务端发起请求。)<br>&emsp;&emsp;WebSocket可以节约带宽，无浪费资源。不停地轮询服务端数据这种方式，使用的是http协议，head信息很大，有效数据占比低， 而使用WebSocket方式，头信息很小，有效数据占比高。轮询方式有可能轮询10次，才碰到服务端数据更新，那么前9次都白轮询了，因为没有拿到变化的数据。 而WebSocket是由服务器主动回发，来的都是新数据。<br>&emsp;&emsp;WebSocket缺点也很明显，它对开发者要求高了很多，对前端开发者，往往要具备数据驱动使用javascript的能力，且需要维持住ws连接（否则消息无法推送）</p>
+<h3 id="为什么会出现WebSocket"><a href="#为什么会出现WebSocket" class="headerlink" title="为什么会出现WebSocket?"></a>为什么会出现WebSocket?</h3><p>&emsp;&emsp;HTTP 协议是一种无状态的、无连接的、单向的应用层协议。它采用了请求/响应模型。通信请求只能由客户端发起，服务端对请求做出应答处理。<br>这种通信模型有一个弊端：HTTP 协议无法实现服务器主动向客户端发起消息。<br>&emsp;&emsp;这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。大多数 Web 应用程序将通过频繁的异步JavaScript和XML（AJAX）请求实现长轮询。轮询的效率低，非常浪费资源（因为必须不停连接，或者 HTTP 连接始终打开）。因此，工程师们一直在思考，有没有更好的方法。WebSocket 就是这样发明的。WebSocket 连接允许客户端和服务器之间进行全双工通信，以便任一方都可以通过建立的连接将数据推送到另一端。WebSocket 只需要建立一次连接，就可以一直保持连接状态。这相比于轮询方式的不停建立连接显然效率要大大提高。</p>
+<p>啰嗦了这么多，就是想让大家对 WebSocket 有一个大概的了解，下面让我来看看 WebSocket API 。</p>
+<h3 id="WebSocket-客户端API"><a href="#WebSocket-客户端API" class="headerlink" title="WebSocket 客户端API"></a>WebSocket 客户端API</h3><h4 id="创建一个WebSocket对象"><a href="#创建一个WebSocket对象" class="headerlink" title="创建一个WebSocket对象"></a>创建一个WebSocket对象</h4><pre><code>const Socket = new WebSocket(url[,protocol])
+</code></pre><p>第一个参数 url, 指定连接的 URL。第二个参数 protocol 是可选的，指定了可接受的子协议。</p>
+<h4 id="WebSocket属性"><a href="#WebSocket属性" class="headerlink" title="WebSocket属性"></a>WebSocket属性</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Socket.readState</td>
+<td>只读属性 readyState 表示连接状态，可以是以下值：<br>0 - 表示连接尚未建立。<br>1 - 表示连接已建立，可以进行通信。<br>2 - 表示连接正在进行关闭。<br>3 - 表示连接已经关闭或者连接不能打开。</td>
+</tr>
+<tr>
+<td>Socket.bufferedAmount</td>
+<td>只读属性 bufferedAmount 已被 send() 放入正在队列中等待传输，但是还没有发出的 UTF-8 文本字节数。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="WebSocket方法"><a href="#WebSocket方法" class="headerlink" title="WebSocket方法"></a>WebSocket方法</h4><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Socket.send()</td>
+<td>使用连接发送数据</td>
+</tr>
+<tr>
+<td>Socket.close()</td>
+<td>关闭连接</td>
+</tr>
+</tbody>
+</table>
+<h4 id="WebSocket事件"><a href="#WebSocket事件" class="headerlink" title="WebSocket事件"></a>WebSocket事件</h4><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>事件处理方式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>open</td>
+<td>Socket.onopen() = () =&gt;</td>
+<td>连接建立时触发</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Socket.onmessage() = () =&gt;</td>
+<td>客户端接收服务端数据时触发</td>
+</tr>
+<tr>
+<td>error</td>
+<td>Socket.onerror() = () =&gt;</td>
+<td>通信发生错误时触发</td>
+</tr>
+<tr>
+<td>close</td>
+<td>Socket.onclose() = () =&gt;</td>
+<td>连接关闭时触发</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>1.属性、方法、事件应用</p>
+<pre><code>var ws = new WebSocket(&quot;wss://echo.websocket.org&quot;);
+
+ws.onopen = function(evt) {
+    console.log(&quot;Connection open ...&quot;);
+    ws.send(&quot;Hello WebSockets!&quot;);
+};
+
+ws.onmessage = function(evt) {
+    console.log( &quot;Received Message: &quot; + evt.data);
+    ws.close();
+};
+
+ws.onclose = function(evt) {
+    console.log(&quot;Connection closed.&quot;);
+};
+
+ws.onerror = function(evt) {
+    console.log(&quot;websocket is error.&quot;);
+};
+</code></pre><p>2.提升应用</p>
+<pre><code>ws.onopen = function(evt) {
+    console.log(&quot;Connection open ...&quot;);
+    ws.send(&quot;Hello WebSockets!&quot;);
+
+    //发送 Blob 对象的例子。
+    var file = document.querySelector(&apos;input[type=&quot;file&quot;]&apos;).files[0];
+    ws.send(file);
+
+    //发送 ArrayBuffer 对象的例子。
+    var img = canvas_context.getImageData(0, 0, 400, 320);
+    var binary = new Uint8Array(img.data.length);
+    for (var i = 0; i &lt; img.data.length; i++) {
+        binary[i] = img.data[i];
+    }
+    ws.send(binary.buffer);
+};
+
+ws.onmessage = function(evt) {
+    //获取信息可能是文本，也可能是二进制数据（blob对象或Arraybuffer对象）。
+    if(typeof event.data === String) {
+        console.log(&quot;Received data string&quot;);
+    }
+
+    if(event.data instanceof ArrayBuffer){
+        var buffer = event.data;
+        console.log(&quot;Received arraybuffer&quot;);
+    }
+
+    //除了动态判断收到的数据类型，也可以使用binaryType属性，显式指定收到的二进制数据类型。
+    // 收到的是 blob 数据
+    ws.binaryType = &quot;blob&quot;;
+    ws.onmessage = function(e) {
+        console.log(e.data.size);
+    };
+
+    // 收到的是 ArrayBuffer 数据
+    ws.binaryType = &quot;arraybuffer&quot;;
+    ws.onmessage = function(e) {
+        console.log(e.data.byteLength);
+    };
+};
+</code></pre><p><strong>资源链接：</strong><br>&emsp;&emsp;<a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="noopener">阮一峰WebSocket教程</a>&emsp;<a href="https://www.cnblogs.com/jingmoxukong/p/7755643.html" target="_blank" rel="noopener">静默虚空博客</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/09/Vue性能优化/" rel="next" title="Vue性能优化">
+                <i class="fa fa-chevron-left"></i> Vue性能优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/20/Redux/" rel="prev" title="Redux">
+                Redux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg" alt="Lnden">
+            
+              <p class="site-author-name" itemprop="name">Lnden</p>
+              <p class="site-description motion-element" itemprop="description">web前端、github</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lnden" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:258231674@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/yourname" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://vk.com/yourname" target="_blank" title="VK Group">
+                      
+                        <i class="fa fa-fw fa-vk"></i>VK Group</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么会出现WebSocket"><span class="nav-number">2.</span> <span class="nav-text">为什么会出现WebSocket?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket-客户端API"><span class="nav-number">3.</span> <span class="nav-text">WebSocket 客户端API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建一个WebSocket对象"><span class="nav-number">3.1.</span> <span class="nav-text">创建一个WebSocket对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket属性"><span class="nav-number">3.2.</span> <span class="nav-text">WebSocket属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket方法"><span class="nav-number">3.3.</span> <span class="nav-text">WebSocket方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket事件"><span class="nav-number">3.4.</span> <span class="nav-text">WebSocket事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-number">4.</span> <span class="nav-text">Example</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnden</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- ??????? -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  
+</body>
+</html>

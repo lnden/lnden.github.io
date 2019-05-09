@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言&amp;emsp;&amp;emsp;其实vue运行时的性能我们不必担心，已经非常棒了！但是首屏加载时间以及加载后的SEO优化，我们还是要考虑的，让我们在vue性能优异的基础上更进一步。这里做一个总结，整合优化方案，以及项目实战中的性能优化。&amp;emsp;&amp;emsp;来，先来看看我手指的方向(右侧)，阅读以下本文的目录，做一个大概的了解，这样阅读起来你的思路才会清晰明了！ 首屏加载优化按需加载这里我们只谈配合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue性能优化">
+<meta property="og:url" content="http://yoursite.com/2018/08/09/Vue性能优化/index.html">
+<meta property="og:site_name" content="Blogs-技术栈">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;其实vue运行时的性能我们不必担心，已经非常棒了！但是首屏加载时间以及加载后的SEO优化，我们还是要考虑的，让我们在vue性能优异的基础上更进一步。这里做一个总结，整合优化方案，以及项目实战中的性能优化。&amp;emsp;&amp;emsp;来，先来看看我手指的方向(右侧)，阅读以下本文的目录，做一个大概的了解，这样阅读起来你的思路才会清晰明了！ 首屏加载优化按需加载这里我们只谈配合">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-09T13:16:23.287Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue性能优化">
+<meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;其实vue运行时的性能我们不必担心，已经非常棒了！但是首屏加载时间以及加载后的SEO优化，我们还是要考虑的，让我们在vue性能优异的基础上更进一步。这里做一个总结，整合优化方案，以及项目实战中的性能优化。&amp;emsp;&amp;emsp;来，先来看看我手指的方向(右侧)，阅读以下本文的目录，做一个大概的了解，这样阅读起来你的思路才会清晰明了！ 首屏加载优化按需加载这里我们只谈配合">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/09/Vue性能优化/">
+
+
+
+
+
+  <title>Vue性能优化 | Blogs-技术栈</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d3fd07fa09a90d143aee5302d68a51c8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <style>
+    .forkme{
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .forkme{
+        display: inline;
+      }
+    }
+  </style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <div class="forkme">
+      <a href="https://github.com/lnden">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+      </a>
+    </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blogs-技术栈</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/09/Vue性能优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnden">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blogs-技术栈">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue性能优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-09T23:51:02+08:00">
+                2018-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;其实vue运行时的性能我们不必担心，已经非常棒了！但是首屏加载时间以及加载后的SEO优化，我们还是要考虑的，让我们在vue性能优异的基础上更进一步。这里做一个总结，整合优化方案，以及项目实战中的性能优化。<br>&emsp;&emsp;来，先来看看我手指的方向(右侧)，阅读以下本文的目录，做一个大概的了解，这样阅读起来你的思路才会清晰明了！</p>
+<h2 id="首屏加载优化"><a href="#首屏加载优化" class="headerlink" title="首屏加载优化"></a>首屏加载优化</h2><h3 id="按需加载"><a href="#按需加载" class="headerlink" title="按需加载"></a>按需加载</h3><p>这里我们只谈配合vue使用的UI框架，目前流行的有</p>
+<p>&emsp;&emsp;1).Element-UI 饿了么vue2.0后台UI框架</p>
+<p>&emsp;&emsp;2).iview 主要服务于 PC 界面的中后台业务</p>
+<p>&emsp;&emsp;3).Mint-UI 饿了么移动端组件库</p>
+<p>我们以 Element-UI 为例实现按需引入，减少项目的体积，减少加载时间，这里我就不介绍完整引入的方式以及vue搭建项目了，你能考虑到按需引入，想必你也是在对项目进行优化，下来让我们实现它！</p>
+<p>1.安装 <code>babel-plugin-component</code> 插件</p>
+<pre><code>cnpm install babel-plugin-component -D
+</code></pre><p>2.修改根目录下 <code>.babelrc</code> 文件</p>
+<pre><code>&quot;plugins&quot;: [
+    [
+        &quot;component&quot;,
+        {
+            &quot;libraryName&quot;: &quot;element-ui&quot;,
+            &quot;styleLibraryName&quot;: &quot;theme-chalk&quot;
+        }
+    ]
+]
+//请认真的阅读代码格式
+</code></pre><p>3.接下来引入你要使用的组件在 <code>main.js</code> 里面</p>
+<pre><code>import { Button,Dialog } from &apos;element-ui&apos;;
+
+Vue.use(Button);    ||     Vue.component(Button.name, Button);
+Vue.use(Dialog);    ||     Vue.component(Dialog.name, Dialog);
+</code></pre><p>到这里就算引入完成了，这是在 <code>main.js</code> 里面统一引入的，挂在到vue的实例上，你也可以在组件内部单独使用某些组件(但是不推荐样使用)</p>
+<pre><code>&lt;!--Login.vue--&gt;
+&lt;template&gt;
+    &lt;section class=&quot;loginInner&quot;&gt;
+        &lt;Button type=&quot;primary&quot;&gt;组件内使用&lt;/Button&gt;
+    &lt;/section&gt;
+&lt;/template&gt;
+
+import { Button,Dialog } from &apos;element-ui&apos;;
+
+components:{
+    Button,         ==&gt; elButton:Button
+    Dialog          ==&gt; elDialog:Dialog
+}
+</code></pre><h3 id="过渡动画"><a href="#过渡动画" class="headerlink" title="过渡动画"></a>过渡动画</h3><p>过渡动画顾名思义，就是前端在加载页面的时候，设计一种划入划出、渐隐渐显的动画效果。这里我们使用vue推荐的方式 <code>transition</code> 的封装组件。</p>
+<pre><code>&lt;transition name=&quot;slide-fade&quot;&gt;
+    &lt;p v-if=&quot;show&quot;&gt;hello&lt;/p&gt;
+&lt;/transition&gt;
+</code></pre><p>具体实施的动画样式，全部写在单独的动画样式文件内，以便日后维护添加新的动画效果</p>
+<p>关于动画页面主流的还有loading图和进度条两种，这里我们稍微在介绍</p>
+<h3 id="引用CDN资源"><a href="#引用CDN资源" class="headerlink" title="引用CDN资源"></a>引用CDN资源</h3><p>CDN的全称是Content Delivery Network，即内容分发网络。<br>使内容传输的更快、更稳定。其目的是使用户可就近取得所需内容，解决 Internet网络拥挤的状况，提高用户访问网站的响应速度。减少服务器的压力等。如果你不了解CDN请自行百度吧！<br>在vue项目中，引入到项目中的所有js、css文件，编译时都会被打包进vendor.js，浏览器在加载该文件之后才能开始显示首屏。若是引入的库众多，那么vendor.js文件体积将会相当的大，影响首开的体验。</p>
+<p>1.资源引入</p>
+<pre><code>&lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;&lt;/div&gt;
+
+    &lt;script src=&quot;https://cdn.bootcss.com/vue/2.5.2/vue.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.bootcss.com/vue-router/3.0.1/vue-router.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.bootcss.com/vuex/3.0.1/vuex.min.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>2.添加配置</p>
+<pre><code>module.exports = {
+    entry: {
+        app: &apos;./src/main.js&apos;
+    },
+    externals:{
+        &apos;vue&apos;: &apos;Vue&apos;,
+        &apos;vue-router&apos;: &apos;VueRouter&apos;,
+        &apos;vuex&apos;:&apos;Vuex&apos;
+    }
+}
+</code></pre><p>新增externals，将引用的外部模块导入。</p>
+<p>注意：格式为 ‘aaa’ : ‘bbb’, 其中，aaa表示要引入的资源的名字，bbb表示该模块提供给外部引用的名字，由对应的库自定。例如，vue为Vue，vue-router为VueRouter。</p>
+<p>3.去掉原有的引用，重新npm run build，会看到vendor.js体积有所下降，通过nextwork工具可以看到vue.js/vuex.js/vendor.js等文件会分别由一个线程进行加载。</p>
+<h3 id="异步组件"><a href="#异步组件" class="headerlink" title="异步组件"></a>异步组件</h3><h3 id="骨架屏"><a href="#骨架屏" class="headerlink" title="骨架屏"></a>骨架屏</h3><h4 id="骨架屏概念"><a href="#骨架屏概念" class="headerlink" title="骨架屏概念"></a>骨架屏概念</h4><p>骨架屏就是在页面内容未加载完成的时候，先使用一些图形进行占位，待内容加载完成之后再把它替换掉。这个技术在一些以内容为主的APP和网页应用较多，接下来我们以一个简单的Vue工程为例，一起探索如何在基于Vue的SPA项目中实现骨架屏。</p>
+<p>为了简单起见，我们使用 <code>vue-cli</code> 搭配 <code>webpack-simple</code> 这个模板来新建项目：</p>
+<pre><code>vue init webpack-simple vue-skeleton
+</code></pre><p>初始化之后我们安装依赖 <code>npm install</code> 安装完成之后启动该项目 <code>npm run dev</code>，一个简单的单页应模板我们就搭建好了，打开index.html。</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        &lt;title&gt;vue-skeleton&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;app&quot;&gt;&lt;/div&gt;
+        &lt;script src=&quot;/dist/build.js&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>可以看到DOM里面仅有一个 <code>div#app</code> ，当js加载完成之后，此 <code>div#app</code> 会被整个替换掉，因此，我们可以来做一下实验，在此div里面添加一些内容</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;Hello skeleton&lt;/p&gt;
+    &lt;p&gt;Hello skeleton&lt;/p&gt;
+    &lt;p&gt;Hello skeleton&lt;/p&gt;
+&lt;/div&gt;
+</code></pre><p>打开Chrome的开发者工具，在Nextwork里面找到throttle功能，调节网速为“Slow 3G”，刷新页面，就能看到页面先是展示了三句“Hello skeleton”，待js加载完了才会替换为原本要展示的内容。现在，我们对于如何在Vue页面实现骨架屏，已经有了一个很清晰的思路——在 <code>div#app</code> 内直接插入骨架屏相关内容即可。</p>
+<p>到目前为止，可以在index.html内事先添加好结构和样式，但是这样不容易维护，感觉有点low，我们需要一个扩展性强且自动化的易维护方案。既然是在Vue项目里，我们当然希望所谓的骨架屏也是一个.vue文件，它能够在构建时由工具自动注入到 <code>div#app</code> 里面。</p>
+<h4 id="易维护方案"><a href="#易维护方案" class="headerlink" title="易维护方案"></a>易维护方案</h4><p>1.首先，我们在 <code>/src</code> 目录下新建一个 <code>Skeleton.vue</code> 文件。在文件内写好需要展示的占位结构和样式</p>
+<p>2.接下来，再新建一个 <code>skeleton.entry.js</code> 入口文件</p>
+<pre><code>import Vue from &apos;vue&apos;
+import Skeleton from &apos;./Skeleton.vue&apos;
+
+export default new Vue({
+  components: {
+    Skeleton
+  },
+  template: &apos;&lt;skeleton /&gt;&apos;
+})
+</code></pre><p>在完成了骨架屏的准备之后，就轮到一个关键插件 <code>vue-server-renderer</code> 登场了。该插件本用于服务端渲染，但是在这个例子里，我们主要利用它能够把.vue文件处理成html和css字符串的功能，来完成骨架屏的注入。</p>
+<p>3.我们还需要在根目录新建一个 <code>webpack.skeleton.conf.js</code> 文件，以专门用来进行骨架屏的构建。</p>
+<pre><code>const path = require(&apos;path&apos;)
+const webpack = require(&apos;webpack&apos;)
+const nodeExternals = require(&apos;webpack-node-externals&apos;)
+const VueSSRServerPlugin = require(&apos;vue-server-renderer/server-plugin&apos;)
+
+module.exports = {
+    target: &apos;node&apos;,
+    entry: {
+        skeleton: &apos;./src/skeleton.entry.js&apos;
+    },
+    output: {
+        path: path.resolve(__dirname, &apos;./dist&apos;),
+        publicPath: &apos;/dist/&apos;,
+        filename: &apos;[name].js&apos;,
+        libraryTarget: &apos;commonjs2&apos;
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    &apos;vue-style-loader&apos;,
+                    &apos;css-loader&apos;
+                ]
+            },
+            {
+                test: /\.vue$/,
+                loader: &apos;vue-loader&apos;
+            }
+        ]
+    },
+    externals: nodeExternals({
+        whitelist: /\.css$/
+    }),
+    resolve: {
+        alias: {
+            &apos;vue$&apos;: &apos;vue/dist/vue.esm.js&apos;
+        },
+        extensions: [&apos;*&apos;, &apos;.js&apos;, &apos;.vue&apos;, &apos;.json&apos;]
+    },
+    plugins: [
+        new VueSSRServerPlugin({
+            filename: &apos;skeleton.json&apos;
+        })
+    ]
+}
+
+cnpm install webpack-node-externals -D
+cnpm install vue-server-renderer -D
+</code></pre><p>可以看到，该配置文件和普通的配置文件基本完全一致，主要的区别在于其 <code>target: &#39;node&#39;</code> ，配置了 <code>externals</code> ，以及在 <code>plugins</code> 里面加入了 <code>VueSSRServerPlugin</code>。在 <code>VueSSRServerPlugin</code> 中，指定了其输出的json文件名。我们可以通过运行下列指令，在 <code>/dist</code> 目录下生成一个 <code>skeleton.json</code> 文件，配置 <code>package.json</code> 文件内 <code>&quot;script&quot;</code></p>
+<pre><code>&quot;generate&quot;: &quot;webpack --config ./webpack.skeleton.conf.js&quot;
+//配置完成之后
+npm run generate
+//dist文件下生成skeleton.json
+//这个文件在记载了骨架屏的内容和样式，会提供给vue-server-renderer使用。
+</code></pre><p>4.接下来，在根目录下新建一个 <code>skeleton.js</code>，该文件即将被用于往index.html内插入骨架屏。</p>
+<pre><code>const fs = require(&apos;fs&apos;)
+const { resolve } = require(&apos;path&apos;)
+
+const createBundleRenderer = require(&apos;vue-server-renderer&apos;).createBundleRenderer
+
+// 读取`skeleton.json`，以`index.html`为模板写入内容
+const renderer = createBundleRenderer(resolve(__dirname, &apos;./dist/skeleton.json&apos;), {
+    template: fs.readFileSync(resolve(__dirname, &apos;./index.html&apos;), &apos;utf-8&apos;)
+})
+
+// 把上一步模板完成的内容写入（替换）`index.html`
+renderer.renderToString({}, (err, html) =&gt; {
+    fs.writeFileSync(&apos;index.html&apos;, html, &apos;utf-8&apos;)
+})
+</code></pre><p>注意，作为模板的html文件，需要在被写入内容的位置添加 <code>&lt;!--vue-ssr-outlet--&gt;</code> 占位符，本例子在 <code>div#app</code>里写入</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;!--vue-ssr-outlet--&gt;
+&lt;/div&gt;
+</code></pre><p>5.接下来，只要运行 <code>node skeleton.js</code>，就可以完成骨架屏的注入了。</p>
+<p>&emsp;&emsp;可以看到，骨架屏的样式通过 <code>&lt;style&gt;&lt;/style&gt;</code> 标签直接被插入，而骨架屏的内容也被放置在div#app之间。当然，我们还可以进一步处理，把这些内容都压缩一下。改写<code>skeleton.js</code>，在里面添加 <code>html-minifier</code> 进行压缩。</p>
+<p>配置 <code>skeleton.js</code> 文件，使用 <code>html-minifier</code> 插件</p>
+<pre><code>+   const htmlMinifier = require(&apos;html-minifier&apos;)
+    renderer.renderToString({}, (err, html) =&gt; {
++       html = htmlMinifier.minify(html, {
++           collapseWhitespace: true,
++           minifyCSS: true
++       })
+        fs.writeFileSync(&apos;index.html&apos;, html, &apos;utf-8&apos;)
+    })
+
+cnpm install html-minifier -D
+</code></pre><blockquote>
+<p>可以参考 <a href="https://segmentfault.com/a/1190000014832185/" target="_blank" rel="noopener">Vue页面骨架屏注入实践</a> 这篇文章，本文只是梳理了该博文的内容,标注已安装的模块</p>
+</blockquote>
+<h2 id="SEO优化"><a href="#SEO优化" class="headerlink" title="SEO优化"></a>SEO优化</h2><h3 id="服务器端渲染SSR"><a href="#服务器端渲染SSR" class="headerlink" title="服务器端渲染SSR"></a>服务器端渲染SSR</h3><h2 id="项目优化"><a href="#项目优化" class="headerlink" title="项目优化"></a>项目优化</h2><p>由于vue构建的项目越来越大，难以维护，所以前期一定要规划好，严格按照标准进行开发。</p>
+<h3 id="编写规则"><a href="#编写规则" class="headerlink" title="编写规则"></a>编写规则</h3><p>1.组件命名方式</p>
+<pre><code>1).首字母大写
+
+2).命名语义化
+
+3).公共组件规范开发Common/Public
+</code></pre><p>2.组件封装严格按照高内聚低耦合原则，拆分到当前组件下components，抽离公共组件。</p>
+<p>3.组件内请求分离，api文件内请求对应views/pages组件内容(净化页面请求，把请求处理统一放在api内处理)</p>
+<p>4.文件内添加好备注信息</p>
+<pre><code>/**
+ * @author Lnden
+ * @date 2018/8/23
+ * @desc File Description
+ * @param {Object} [title]  - 参数说明
+ * @example 调用示例
+ */
+</code></pre><p>5.vuex严格按照官方推荐方式，并且拆分五部分</p>
+<pre><code>├─store
+│  ├─index.js
+│  ├─getters.js
+│  ├─state,js
+│  ├─actions.js
+│  ├─mutations.js
+│  ├─mutation-types.js
+</code></pre><p>6.图标统一使用的是svg和<a href="http://www.iconfont.cn/" target="_blank" rel="noopener">阿里矢量图标库</a>使用方式：symbol引用。组件注入vue跟实例上，直接使用无需引入</p>
+<p>7.页面样式禁止使用!important;</p>
+<p>8.禁止控制台输出 [黄色] 以及 [红色] 警告和报错信息</p>
+<p>9.代码缩进，使用4个空格作为一个缩进层级(请调试好自己使用的编辑器)</p>
+<p>10.如果使用第三方插件或者是库，npm install …  –save-dve/-D 之后，请在README.md中进行备注</p>
+<h3 id="基础优化"><a href="#基础优化" class="headerlink" title="基础优化"></a>基础优化</h3><p>1.v-if和v-show的使用场景<br>&emsp;&emsp;第一个维度是权限问题，只要涉及到权限相关的展示无疑要用v-if<br>&emsp;&emsp;第二个维度在没有权限限制下根据用户点击的频次选择，频繁切换的使用 v-show，不频繁切换的使用 v-if</p>
+<p>2.不要在模板里面写过多的判断与表达式</p>
+<pre><code>虽然可以识别，但是不宜读，不好维护，建议封装在methods或者computed里面，便于其他相同地方复用
+v-if=&quot;isFirst &amp;&amp; isAadmin &amp;&amp; (a||b)&quot;
+</code></pre><p>2.使用v-for循环时绑定key唯一值</p>
+<pre><code>用v-for 正在更新已渲染过的元素列表时，它默认用“就地复用”策略。
+如果数据项的顺序被改变，Vue 将不会移动 DOM 元素来匹配数据项的顺序， 而是简单复用此处每个元素，
+并且确保它在特定索引下显示已被渲染过的每个元素
+&lt;ul&gt;
+    &lt;li v-for=&quot;(item,index) dataList&quot; :key=&quot;index&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre><p>3.对路由组件进行懒加载</p>
+<pre><code>这里的懒加载是指在访问到对应的组件时才加载它，首屏的时候不加载
+const Login = () =&gt; import(&apos;@/pages/Login&apos;)
+{ path: &apos;/login&apos;, component: () =&gt; import(&apos;@/views/login/Login&apos;), hidden: true }
+</code></pre><p>4.打包优化<br>&emsp;&emsp;打包 vender 时不打包 vue、vuex、vue-router、axios 等，换用国内的 bootcdn 直接引入到根目录的 index.html 中。</p>
+<pre><code>&lt;script src=&quot;//cdn.bootcss.com/vue/2.2.5/vue.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//cdn.bootcss.com/vue-router/2.3.0/vue-router.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//cdn.bootcss.com/vuex/2.2.1/vuex.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//cdn.bootcss.com/axios/0.15.3/axios.min.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>在webpack里面有一个externals,可以忽略不需要打包的库</p>
+<pre><code>externals: {
+  &apos;vue&apos;: &apos;Vue&apos;,
+  &apos;vue-router&apos;: &apos;VueRouter&apos;,
+  &apos;vuex&apos;: &apos;Vuex&apos;,
+  &apos;axios&apos;: &apos;axios&apos;
+}
+</code></pre><p>5.异步组件的方式</p>
+<pre><code>&lt;app&gt;
+    &lt;A&gt;&lt;/A&gt;
+    &lt;B v-if=&quot;showB&quot;&gt;&lt;B/&gt;
+    &lt;C v-if=&quot;showC&quot;&gt;&lt;C/&gt;
+&lt;/app&gt;
+
+new Vue({
+    data:{
+        showB:false,
+        showC:false
+    },
+    created(){
+        //显示B
+        setTimeout(()=&gt;{
+            this.showB = true;
+        },0);
+        //显示c
+        setTimeout(()=&gt;{
+            this.showC = true;
+        },0);
+    }
+})
+因为v-if是惰性的，只有当第一次值为true时才会开始初始化。
+</code></pre><p>6.按需加载</p>
+<p>&emsp;&emsp;当前流行的UI框架如iview,muse-ui,Element UI都支持按需加载,只需稍微改动一下代码.</p>
+<p>修改前</p>
+<pre><code>import ElementUI from &apos;element-ui&apos;;
+import &apos;element-ui/lib/theme-chalk/index.css&apos;;
+Vue.use(ElementUI)
+</code></pre><p>修改后<br>借助 <code>babel-plugin-component</code>，我们可以只引入需要的组件，以达到减小项目体积的目的。</p>
+<pre><code>npm install babel-plugin-component -D
+</code></pre><p>然后，将 .babelrc 修改为：</p>
+<pre><code>{
+  &quot;presets&quot;: [[&quot;es2015&quot;, { &quot;modules&quot;: false }]],
+  &quot;plugins&quot;: [
+    [
+      &quot;component&quot;,
+      {
+        &quot;libraryName&quot;: &quot;element-ui&quot;,
+        &quot;styleLibraryName&quot;: &quot;theme-chalk&quot;
+      }
+    ]
+  ]
+}
+
+import { Button, Select } from &apos;element-ui&apos;;
+
+Vue.component(Button.name, Button);
+Vue.component(Select.name, Select);
+/* 或写为
+ * Vue.use(Button)
+ * Vue.use(Select)
+ */
+</code></pre><p>7.服务端开启 gzip 压缩</p>
+<p>未开启压缩状态<br>Request Headers里面的Accept-Encoding: gzip只是表示前端（用户浏览器）支持gzip的压缩方式。</p>
+<p>开启gzip状态，具体可以看Response Headers中的Content-Encoding字段是否为gzip。</p>
+<p>&emsp;&emsp;1.前端需要修改config/index.js文件</p>
+<pre><code>productionGzip: true,    //true为开启Gzip压缩（默认为fals）
+productionGzipExtensions: [&apos;js&apos;,&apos;css&apos;]
+</code></pre><p>&emsp;&emsp;2.前端需要配置build/webpack.prod.conf.js文件</p>
+<pre><code>if(config.build.productionGzip) {
+    const CompressionWebpackPlugin = require(&apos;compression-webpack-plugin&apos;)
+    webpackConfig.plugins.push(
+        new CompressionWebpackPlugin({
+            asset: &apos;[path].gz[query]&apos;,
+            algorithm: &apos;gzip&apos;,
+            test: new RegExp(
+                &apos;\\.(&apos; +
+                config.build.productionGzipExtensions.join(&apos;|&apos;) +
+                &apos;)$&apos;
+                ),
+            threshold: 10240,
+            // deleteOriginalAssets:true, //删除源文件，不建议
+            minRatio: 0.8
+        })
+    )
+}
+</code></pre><p>而服务器支持gzip的方式可以有两种：</p>
+<p>1.打包的时候生成对应的.gz文件，浏览器请求xx.js时，服务器返回对应的xxx.js.gz文件</p>
+<p>2.浏览器请求xx.js时，服务器对xx.js进行gzip压缩后传输给浏览器</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>重点<a href="https://juejin.im/entry/58df274f61ff4b006b122948" target="_blank" rel="noopener">https://juejin.im/entry/58df274f61ff4b006b122948</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/16/Chrome扩展/" rel="next" title="Chrome扩展">
+                <i class="fa fa-chevron-left"></i> Chrome扩展
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/16/Websocket简介/" rel="prev" title="WebSocket简介">
+                WebSocket简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg" alt="Lnden">
+            
+              <p class="site-author-name" itemprop="name">Lnden</p>
+              <p class="site-description motion-element" itemprop="description">web前端、github</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lnden" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:258231674@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/yourname" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://vk.com/yourname" target="_blank" title="VK Group">
+                      
+                        <i class="fa fa-fw fa-vk"></i>VK Group</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#首屏加载优化"><span class="nav-number">2.</span> <span class="nav-text">首屏加载优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#按需加载"><span class="nav-number">2.1.</span> <span class="nav-text">按需加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过渡动画"><span class="nav-number">2.2.</span> <span class="nav-text">过渡动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用CDN资源"><span class="nav-number">2.3.</span> <span class="nav-text">引用CDN资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步组件"><span class="nav-number">2.4.</span> <span class="nav-text">异步组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#骨架屏"><span class="nav-number">2.5.</span> <span class="nav-text">骨架屏</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#骨架屏概念"><span class="nav-number">2.5.1.</span> <span class="nav-text">骨架屏概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#易维护方案"><span class="nav-number">2.5.2.</span> <span class="nav-text">易维护方案</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SEO优化"><span class="nav-number">3.</span> <span class="nav-text">SEO优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器端渲染SSR"><span class="nav-number">3.1.</span> <span class="nav-text">服务器端渲染SSR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目优化"><span class="nav-number">4.</span> <span class="nav-text">项目优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写规则"><span class="nav-number">4.1.</span> <span class="nav-text">编写规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础优化"><span class="nav-number">4.2.</span> <span class="nav-text">基础优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnden</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- ??????? -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  
+</body>
+</html>

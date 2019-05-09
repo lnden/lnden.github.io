@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="官网 | Github | 简书 | 腾讯云 Chrome浏览器扩展程序&amp;emsp;&amp;emsp;所谓浏览器扩展程序，就是在浏览器的基础上功能上添加一些常用的功能，使浏览器更加强大，并且给工作带来高效！使开发人员得心应手，让用户体验更好。如果你现在还不知道什么是Chrome扩展程序。那我就带你一起进入Chrome扩展程序的世界里进行遨游~ manifest.json文件&amp;emsp;&amp;emsp;Chr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chrome扩展">
+<meta property="og:url" content="http://yoursite.com/2018/07/16/Chrome扩展/index.html">
+<meta property="og:site_name" content="Blogs-技术栈">
+<meta property="og:description" content="官网 | Github | 简书 | 腾讯云 Chrome浏览器扩展程序&amp;emsp;&amp;emsp;所谓浏览器扩展程序，就是在浏览器的基础上功能上添加一些常用的功能，使浏览器更加强大，并且给工作带来高效！使开发人员得心应手，让用户体验更好。如果你现在还不知道什么是Chrome扩展程序。那我就带你一起进入Chrome扩展程序的世界里进行遨游~ manifest.json文件&amp;emsp;&amp;emsp;Chr">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-09T13:16:23.277Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chrome扩展">
+<meta name="twitter:description" content="官网 | Github | 简书 | 腾讯云 Chrome浏览器扩展程序&amp;emsp;&amp;emsp;所谓浏览器扩展程序，就是在浏览器的基础上功能上添加一些常用的功能，使浏览器更加强大，并且给工作带来高效！使开发人员得心应手，让用户体验更好。如果你现在还不知道什么是Chrome扩展程序。那我就带你一起进入Chrome扩展程序的世界里进行遨游~ manifest.json文件&amp;emsp;&amp;emsp;Chr">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/16/Chrome扩展/">
+
+
+
+
+
+  <title>Chrome扩展 | Blogs-技术栈</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d3fd07fa09a90d143aee5302d68a51c8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <style>
+    .forkme{
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .forkme{
+        display: inline;
+      }
+    }
+  </style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <div class="forkme">
+      <a href="https://github.com/lnden">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+      </a>
+    </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blogs-技术栈</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/16/Chrome扩展/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnden">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blogs-技术栈">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Chrome扩展</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-16T22:43:08+08:00">
+                2018-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://airbnb.io/lottie/" target="_blank" rel="noopener">官网</a> | <a href="https://github.com/airbnb/lottie/" target="_blank" rel="noopener">Github</a> | <a href="http://www.jianshu.com/p/9a2136ecbc7b/" target="_blank" rel="noopener">简书</a> | <a href="https://www.qcloud.com/community/article/980116" target="_blank" rel="noopener">腾讯云</a></p>
+<h3 id="Chrome浏览器扩展程序"><a href="#Chrome浏览器扩展程序" class="headerlink" title="Chrome浏览器扩展程序"></a>Chrome浏览器扩展程序</h3><p>&emsp;&emsp;所谓浏览器扩展程序，就是在浏览器的基础上功能上添加一些常用的功能，使浏览器更加强大，并且给工作带来高效！使开发人员得心应手，让用户体验更好。如果你现在还不知道什么是Chrome扩展程序。那我就带你一起进入Chrome扩展程序的世界里进行遨游~</p>
+<h3 id="manifest-json文件"><a href="#manifest-json文件" class="headerlink" title="manifest.json文件"></a>manifest.json文件</h3><p>&emsp;&emsp;Chrome扩展程序必须包含一个maniest.json文件，这个文件的文件名固定为manifest.json。Chrome扩展的manifest.json必须包含 <code>name</code>、<code>version</code> 和 <code>manifest_version</code> 属性，目前来说manifest_version属性值只能为数字2，[ 对于Chrome应用来说，还必须包含app属性 ]。</p>
+<p>manifest.json 内容详解<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;IDSC 工作助手&quot;,</span><br><span class="line">    &quot;version&quot;: 1.0.1&quot;,</span><br><span class="line">    &quot;manifest_version&quot;: 2</span><br><span class="line">    &quot;description&quot;: &quot;灵活可配、辅助审核、快捷操作、提能增效。&quot;,</span><br><span class="line">    &quot;permissions&quot;: [</span><br><span class="line">        &quot;desc&quot;: &quot;扩展程序权限配置&quot;,</span><br><span class="line">        &quot;declarativeContent&quot;,</span><br><span class="line">        &quot;storage&quot;,</span><br><span class="line">        &quot;contextMenus&quot;,</span><br><span class="line">        &quot;webRequest&quot;,</span><br><span class="line">        &quot;https://asn.qq.com/*&quot;,</span><br><span class="line">        &quot;tabs&quot;,</span><br><span class="line">        &quot;activeTab&quot;,</span><br><span class="line">        &quot;notifications&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;background&quot;: &#123;</span><br><span class="line">         &quot;desc&quot;: &quot;Chrome扩展后台常住页面,会一直常驻的后台JS或后台页面&quot;,</span><br><span class="line">        //&quot;page&quot;: &quot;background.html&quot;,</span><br><span class="line">        &quot;scripts&quot;: [</span><br><span class="line">            &quot;lib/jquery-3.3.1.js&quot;,</span><br><span class="line">            &quot;config.js&quot;,</span><br><span class="line">            &quot;backgroundCommon.js&quot;,</span><br><span class="line">            &quot;background.js&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;persistent&quot;: true    //需要时加载，在空闲时被关闭，什么叫被需要时呢？比如第一次安装、插件更新、有content-script向它发送消息，等等。</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;options_page&quot;: &quot;options.html&quot;,     //Chrome40以前的写法</span><br><span class="line">    &quot;options_ui&quot;: &#123;     //Chrome40以后的写法</span><br><span class="line">        &quot;desc&quot;: &quot;右击扩展图标，点击选项按钮&quot;,</span><br><span class="line">        &quot;page&quot;: &quot;options.html&quot;,</span><br><span class="line">        &quot;open_in_tab&quot;: true,    // 默认打开的样式，是否新建tabs窗口，true为新建窗口，false为新特性弹层</span><br><span class="line">        &quot;chrome_style&quot;: true    // 添加一些默认的样式，推荐使用</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;browser_action&quot;: &#123;</span><br><span class="line">        &quot;default_title&quot;: &quot;IDSC 工作助手&quot;,</span><br><span class="line">        &quot;default_icon&quot;: &#123;</span><br><span class="line">            &quot;16&quot;: &quot;images/16.png&quot;,</span><br><span class="line">            &quot;32&quot;: &quot;images/32.png&quot;,</span><br><span class="line">            &quot;48&quot;: &quot;images/48.png&quot;,</span><br><span class="line">            &quot;128&quot;: &quot;images/128.png&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;desc&quot;:&quot;1.初始化默认展示login页面&quot;,</span><br><span class="line">        &quot;default_popup&quot;: &quot;login.html&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;icons&quot;: &#123;</span><br><span class="line">        &quot;16&quot;: &quot;images/16.png&quot;,</span><br><span class="line">        &quot;32&quot;: &quot;images/32.png&quot;,</span><br><span class="line">        &quot;48&quot;: &quot;images/48.png&quot;,</span><br><span class="line">        &quot;128&quot;: &quot;images/128.png&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;content_scripts&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">        &quot;matches&quot;: [&quot;https://publicboss.qq.com/*&quot;],</span><br><span class="line">        &quot;css&quot;: [&quot;lib/bpoAssistant.css&quot;],</span><br><span class="line">        &quot;js&quot;: [</span><br><span class="line">            &quot;lib/jquery-3.3.1.js&quot;,</span><br><span class="line">            &quot;lib/jquery-ui-1.12.1/jquery-ui.js&quot;,</span><br><span class="line">            &quot;contentFunctionalitySwitch.js&quot;,</span><br><span class="line">            &quot;contentCommon.js&quot;,</span><br><span class="line">            &quot;contentImageText.js&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;run_at&quot;: &quot;document_end&quot;,</span><br><span class="line">        &quot;all_frames&quot;: true</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;web_accessible_resources&quot;: [</span><br><span class="line">        &quot;images/error.jpg&quot;,</span><br><span class="line">        &quot;login.html&quot;,</span><br><span class="line">        &quot;login.js&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/16/选题列表/" rel="next" title="选题列表">
+                <i class="fa fa-chevron-left"></i> 选题列表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/09/Vue性能优化/" rel="prev" title="Vue性能优化">
+                Vue性能优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg" alt="Lnden">
+            
+              <p class="site-author-name" itemprop="name">Lnden</p>
+              <p class="site-description motion-element" itemprop="description">web前端、github</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lnden" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:258231674@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/yourname" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://vk.com/yourname" target="_blank" title="VK Group">
+                      
+                        <i class="fa fa-fw fa-vk"></i>VK Group</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chrome浏览器扩展程序"><span class="nav-number">1.</span> <span class="nav-text">Chrome浏览器扩展程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#manifest-json文件"><span class="nav-number">2.</span> <span class="nav-text">manifest.json文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnden</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- ??????? -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  
+</body>
+</html>

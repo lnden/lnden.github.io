@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="web前端安全之XSS攻击简介&amp;emsp;&amp;emsp;XSS是跨站脚本攻击（Cross-Site Scripting）的简称，XSS这类安全问题发生的本质原因在于，浏览器错误的将攻击者提供的用户输入数据当做JavaScript脚本给执行了。XSS被划分为： 反射型XSS&amp;emsp;&amp;emsp;数据库中存有的存在XSS攻击的数据，返回给客户端。若数据未经过任何转义，被浏览器渲染，就可能导致XSS攻击">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web前端安全">
+<meta property="og:url" content="http://yoursite.com/2018/03/23/web前端安全/index.html">
+<meta property="og:site_name" content="Blogs-技术栈">
+<meta property="og:description" content="web前端安全之XSS攻击简介&amp;emsp;&amp;emsp;XSS是跨站脚本攻击（Cross-Site Scripting）的简称，XSS这类安全问题发生的本质原因在于，浏览器错误的将攻击者提供的用户输入数据当做JavaScript脚本给执行了。XSS被划分为： 反射型XSS&amp;emsp;&amp;emsp;数据库中存有的存在XSS攻击的数据，返回给客户端。若数据未经过任何转义，被浏览器渲染，就可能导致XSS攻击">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-09T13:16:23.308Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="web前端安全">
+<meta name="twitter:description" content="web前端安全之XSS攻击简介&amp;emsp;&amp;emsp;XSS是跨站脚本攻击（Cross-Site Scripting）的简称，XSS这类安全问题发生的本质原因在于，浏览器错误的将攻击者提供的用户输入数据当做JavaScript脚本给执行了。XSS被划分为： 反射型XSS&amp;emsp;&amp;emsp;数据库中存有的存在XSS攻击的数据，返回给客户端。若数据未经过任何转义，被浏览器渲染，就可能导致XSS攻击">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/23/web前端安全/">
+
+
+
+
+
+  <title>web前端安全 | Blogs-技术栈</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d3fd07fa09a90d143aee5302d68a51c8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <style>
+    .forkme{
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .forkme{
+        display: inline;
+      }
+    }
+  </style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <div class="forkme">
+      <a href="https://github.com/lnden">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+      </a>
+    </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blogs-技术栈</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/23/web前端安全/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnden">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blogs-技术栈">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">web前端安全</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T23:39:06+08:00">
+                2018-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="web前端安全之XSS攻击"><a href="#web前端安全之XSS攻击" class="headerlink" title="web前端安全之XSS攻击"></a>web前端安全之XSS攻击</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>&emsp;&emsp;XSS是跨站脚本攻击（Cross-Site Scripting）的简称，XSS这类安全问题发生的本质原因在于，浏览器错误的将攻击者提供的用户输入数据当做JavaScript脚本给执行了。XSS被划分为：</p>
+<h4 id="反射型XSS"><a href="#反射型XSS" class="headerlink" title="反射型XSS"></a>反射型XSS</h4><p>&emsp;&emsp;数据库中存有的存在XSS攻击的数据，返回给客户端。若数据未经过任何转义，被浏览器渲染，就可能导致XSS攻击。</p>
+<blockquote>
+<p>实例：正常发送消息</p>
+</blockquote>
+<p>正常操作</p>
+<ul>
+<li><code><a href="http://www.test.com/message.php?send=Hello,World！" target="_blank" rel="noopener">http://www.test.com/message.php?send=Hello,World！</a></code> 接收者将会接收信息并显示 <code>Hello,Word</code></li>
+</ul>
+<p>非正常操作</p>
+<ul>
+<li><code><a href="http://www.test.com/message.php?send=&lt;script&gt;alert(&#39;foolish!&#39;)&lt;/script&gt;！" target="_blank" rel="noopener">http://www.test.com/message.php?send=&lt;script&gt;alert(&#39;foolish!&#39;)&lt;/script&gt;！</a></code> 接收者接收消息显示的时候将会弹出警告窗口</li>
+</ul>
+<h4 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h4><p>&emsp;&emsp;将用户输入的存在XSS攻击的数据，发送给后台，后台并未对数据进行存储，也未经过任何过滤，直接返回给客户端。被浏览器渲染。就可能导致XSS攻击；</p>
+<blockquote>
+<p>实例：留言板 [ input、textarea ]</p>
+</blockquote>
+<p>正常操作</p>
+<ul>
+<li>用户是提交相应留言信息，将数据存储到数据库，其他用户访问留言板时，获取数据并显示。</li>
+</ul>
+<p>非正常操作</p>
+<ul>
+<li>攻击者在  <code>value</code>  填写 <code>&lt;script&gt;alert(‘foolish!’)&lt;/script&gt;</code> 或者 <code>html</code> 其他标签（破坏样式…）、一段攻击型代码，将数据存储到数据库中，其他用户取出数据显示的时候，将会执行这些攻击性代码。</li>
+</ul>
+<h4 id="DOMBasedXSS"><a href="#DOMBasedXSS" class="headerlink" title="DOMBasedXSS"></a>DOMBasedXSS</h4><p>&emsp;&emsp;当用户能够通过交互修改浏览器页面中的DOM(DocumentObjectModel)并显示在浏览器上时，就有可能产生这种漏洞，从效果上来说它也是反射型XSS。通过修改页面的DOM节点形成的XSS，称之为DOMBasedXSS。</p>
+<blockquote>
+<p>实例：页面URL获取参数</p>
+</blockquote>
+<p>正常操作</p>
+<ul>
+<li><code><a href="http://www.vulnerable.site/welcome.html?name=Joe" target="_blank" rel="noopener">http://www.vulnerable.site/welcome.html?name=Joe</a></code></li>
+</ul>
+<p>非正操操作</p>
+<ul>
+<li><code><a href="http://www.vulnerable.site/welcome.html?name=&lt;script&gt;alert(document.cookie)&lt;/script" target="_blank" rel="noopener">http://www.vulnerable.site/welcome.html?name=&lt;script&gt;alert(document.cookie)&lt;/script</a>&gt;</code></li>
+</ul>
+<h4 id="XSS危害"><a href="#XSS危害" class="headerlink" title="XSS危害"></a>XSS危害</h4><p>&emsp;&emsp;1).通过document.cookie盗取cookie<br>&emsp;&emsp;2).强制发送电子邮件<br>&emsp;&emsp;3).盗取各类用户帐号，如机器登录帐号、用户网银帐号、各类管理员帐号<br>&emsp;&emsp;4).控制企业数据，包括读取、篡改、添加、删除企业敏感数据的能力<br>&emsp;&emsp;5).控制受害者机器向其它网站发起攻击</p>
+<h4 id="XSS防御"><a href="#XSS防御" class="headerlink" title="XSS防御"></a>XSS防御</h4><p>对cookie的保护<br>&emsp;&emsp;1).设置httpOnly</p>
+<p>对用户输入数据的处理<br>&emsp;&emsp;1).编码<br>&emsp;&emsp;2).解码<br>&emsp;&emsp;3).过滤</p>
+<h3 id="白帽子讲Web安全"><a href="#白帽子讲Web安全" class="headerlink" title="白帽子讲Web安全"></a>白帽子讲Web安全</h3><p>&emsp;&emsp;事情的经过是这样的，自动化测试的同事找过来和我说了一个关于XSS攻击的问题，我当时就在想XSS是什么鬼，这个BUG怎么解决。随后我了解到，XSS就是在用户输入的时候可以输入一个脚本 <code>javascript</code> 执行 <code>alert(1)</code> 也可以输入一个 <code>document.cookie()</code>。并且可以把脚本存储到数据库在反给客户端进行XSS攻击。<br>&emsp;&emsp;因为这个XSS，引起了我对Web前端安全的研究，机缘巧合我遇见了《白帽子讲Web安全》一书，从而使我对前端安全有一个更多的了解。以下就是我前端安全的一些了解，或者是对本书做一个观后感吧！我会每天持续更新….如果有幸你看见我的bolg，请你关注我，我也会同样的去关注你。让我们一起在github上共同学习，成为前端届的大牛~</p>
+<ul>
+<li>纪要：CSDN在2011年12月21日公开道歉，泄漏600万用户数据的数据，并且都是明文显示。对天涯等一些社区也造成用户信息的丢失。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/14/weChat小程序入门分析及使用/" rel="next" title="weChat小程序入门分析及使用">
+                <i class="fa fa-chevron-left"></i> weChat小程序入门分析及使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/04/Vue入门与实战/" rel="prev" title="Vue入门与实战">
+                Vue入门与实战 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1516858745&di=de4f2aea6690da0740e9417c80e5a9de&src=http://img5.duitang.com/uploads/item/201603/07/20160307232137_fUrNA.jpeg" alt="Lnden">
+            
+              <p class="site-author-name" itemprop="name">Lnden</p>
+              <p class="site-description motion-element" itemprop="description">web前端、github</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lnden" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:258231674@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/yourname" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://vk.com/yourname" target="_blank" title="VK Group">
+                      
+                        <i class="fa fa-fw fa-vk"></i>VK Group</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#web前端安全之XSS攻击"><span class="nav-number">1.</span> <span class="nav-text">web前端安全之XSS攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反射型XSS"><span class="nav-number">1.2.</span> <span class="nav-text">反射型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储型XSS"><span class="nav-number">1.3.</span> <span class="nav-text">存储型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DOMBasedXSS"><span class="nav-number">1.4.</span> <span class="nav-text">DOMBasedXSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS危害"><span class="nav-number">1.5.</span> <span class="nav-text">XSS危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS防御"><span class="nav-number">1.6.</span> <span class="nav-text">XSS防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#白帽子讲Web安全"><span class="nav-number">2.</span> <span class="nav-text">白帽子讲Web安全</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnden</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- ??????? -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  
+</body>
+</html>
