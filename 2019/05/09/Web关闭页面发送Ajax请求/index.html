@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Blogs-技术栈">
 <meta property="og:description" content="前言&amp;emsp;&amp;emsp;简单的介绍一下项目需求，后台管系统退出登录的时候要给后台发送请求，所谓的打卡功能。你是不是会想seo easy~ 登出的时候先调一下打卡请求成功之后在调用logout()方法，no no no ! 这才是入坑的开始，正常的思路是规规矩矩的点击退出按钮，但是你要考虑退出系统有很多方式。 例如： 1、右上角的叉号X 2、浏览器页签的小叉号x 3、任务栏右键点击关闭 4、浏览">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-09T16:46:16.157Z">
+<meta property="og:updated_time" content="2019-05-31T10:26:43.808Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web关闭页面发送Ajax请求">
 <meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;简单的介绍一下项目需求，后台管系统退出登录的时候要给后台发送请求，所谓的打卡功能。你是不是会想seo easy~ 登出的时候先调一下打卡请求成功之后在调用logout()方法，no no no ! 这才是入坑的开始，正常的思路是规规矩矩的点击退出按钮，但是你要考虑退出系统有很多方式。 例如： 1、右上角的叉号X 2、浏览器页签的小叉号x 3、任务栏右键点击关闭 4、浏览">
@@ -414,12 +414,18 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">window.onunload = (e) =&gt; &#123;</span><br><span class="line">    logout();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">window.addEventListener(&quot;unload&quot;, (e) =&gt; &#123;</span><br><span class="line">    logout();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>基于以上两个方法就可以实现对页面关闭的时间监听，为了稳妥，可以两个事件都监听。然后对监听函数做处理，让关闭事件只调用一次。</p>
 <h3 id="请求发送"><a href="#请求发送" class="headerlink" title="请求发送"></a>请求发送</h3><h3 id="H5新特性Beacon-API方案"><a href="#H5新特性Beacon-API方案" class="headerlink" title="H5新特性Beacon API方案"></a>H5新特性Beacon API方案</h3><ul>
-<li><p>使用Blob来发送</p>
-</li>
-<li><p>使用FormData对象</p>
-</li>
-<li></li>
+<li>使用Blob来发送<br>&emsp;&emsp;使用blob发送的好处是可以自定义内容的格式和header。比如下面这种设置方式，就可是可以设置content-type为application、x-www-form-urlencoded</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blob = new Blob([`romm_id=123`],&#123;type: &apos;application/x-www-form-urlencoded&apos;&#125;)</span><br><span class="line">navigator.sendBeacon(&apos;/cgi-bin/leave-room&apos;,blob)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>使用FormData对象<br>&emsp;&emsp;但是这时content-type会被设置成”multipart/form-data”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var fd = new FormData()</span><br><span class="line">fd.append(&apos;room_id&apos;,123)</span><br><span class="line">let result = navigator.sendBeacon(&apos;/cgi-bin/leave-room&apos;,fd)</span><br><span class="line">if(result)&#123;</span><br><span class="line">    console.log(&apos;请求成功排队，等待执行&apos;)</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    console.log(&apos;失败&apos;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数据也可以使用URLSearchParams 对象<br>&emsp;&emsp;content-type会被设置成”text/plain;charset=UTF-8”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var params = new URLSearchParams(&#123;room_id:123&#125;)</span><br><span class="line">navigator.sendBeacon(&quot;/cgi-bin/leave-room&quot;,params)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>虽然现在浏览器对sendBeacon的支持很多，我们对其做一下兼容性处理也是有必要的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if(navigator.sendBeacon)&#123;</span><br><span class="line">    console.log(&apos;执行Beacon代码&apos;)</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    console.log(&apos;回退到XHR同步请求或者不做处理&apos;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
