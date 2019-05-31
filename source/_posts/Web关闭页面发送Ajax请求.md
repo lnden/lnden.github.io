@@ -104,7 +104,37 @@ window.addEventListener("unload", (e) => {
 ### H5新特性Beacon API方案
 
 - 使用Blob来发送
+&emsp;&emsp;使用blob发送的好处是可以自定义内容的格式和header。比如下面这种设置方式，就可是可以设置content-type为application、x-www-form-urlencoded
 
+```angular2html
+    blob = new Blob([`romm_id=123`],{type: 'application/x-www-form-urlencoded'})
+    navigator.sendBeacon('/cgi-bin/leave-room',blob)
+```
 - 使用FormData对象
+&emsp;&emsp;但是这时content-type会被设置成"multipart/form-data"
+```angular2html
+    var fd = new FormData()
+    fd.append('room_id',123)
+    let result = navigator.sendBeacon('/cgi-bin/leave-room',fd)
+    if(result){
+        console.log('请求成功排队，等待执行')
+    }else{
+        console.log('失败')
+    }
+```
 
-- 
+- 数据也可以使用URLSearchParams 对象
+&emsp;&emsp;content-type会被设置成"text/plain;charset=UTF-8"
+```angular2html
+    var params = new URLSearchParams({room_id:123})
+    navigator.sendBeacon("/cgi-bin/leave-room",params)
+```
+
+虽然现在浏览器对sendBeacon的支持很多，我们对其做一下兼容性处理也是有必要的：
+```angular2html
+    if(navigator.sendBeacon){
+        console.log('执行Beacon代码')
+    }else{
+        console.log('回退到XHR同步请求或者不做处理')
+    }
+```
