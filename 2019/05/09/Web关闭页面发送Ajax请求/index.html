@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Blogs-技术栈">
 <meta property="og:description" content="前言&amp;emsp;&amp;emsp;简单的介绍一下项目需求，后台管系统退出登录的时候要给后台发送请求，所谓的打卡功能。你是不是会想seo easy~ 登出的时候先调一下打卡请求成功之后在调用logout()方法，no no no ! 这才是入坑的开始，正常的思路是规规矩矩的点击退出按钮，但是你要考虑退出系统有很多方式。 例如： 1、右上角的叉号X 2、浏览器页签的小叉号x 3、任务栏右键点击关闭 4、浏览">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-09T15:38:49.446Z">
+<meta property="og:updated_time" content="2019-05-09T16:46:16.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web关闭页面发送Ajax请求">
 <meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;简单的介绍一下项目需求，后台管系统退出登录的时候要给后台发送请求，所谓的打卡功能。你是不是会想seo easy~ 登出的时候先调一下打卡请求成功之后在调用logout()方法，no no no ! 这才是入坑的开始，正常的思路是规规矩矩的点击退出按钮，但是你要考虑退出系统有很多方式。 例如： 1、右上角的叉号X 2、浏览器页签的小叉号x 3、任务栏右键点击关闭 4、浏览">
@@ -395,7 +395,7 @@
 <h3 id="onbeforeunload-事件"><a href="#onbeforeunload-事件" class="headerlink" title="onbeforeunload 事件"></a>onbeforeunload 事件</h3><ul>
 <li>定义</li>
 </ul>
-<p>&emsp;&emsp;onbeforeunload事件在即将离开当前页面(刷新或关闭)时触发。</p>
+<p>onbeforeunload 事件在即将离开当前页面(刷新或关闭)时触发。</p>
 <p>该事件可以用于弹出对话框，提示用户是继续浏览页面还是离开当前页面。return ‘是否关闭’对话默认的提示信息根据不同的浏览器有所不同，标准的信息类似”确定要离开此页面吗?”，该信息不能被删除。</p>
 <ul>
 <li>使用方法</li>
@@ -406,12 +406,20 @@
 <li>定义</li>
 </ul>
 <p>onunload 属性会在页面卸载时触发 (或者浏览器窗口已经关闭)</p>
+<p>onunload 在用户从页面导航离开时发生 (通过点击链接。提交表单或者关闭浏览器窗口)</p>
+<p><strong>注释:</strong> 重载页面也会触发 unload 事件</p>
 <ul>
 <li>使用方法</li>
 </ul>
-<h1 id="我是一级"><a href="#我是一级" class="headerlink" title="我是一级"></a>我是一级</h1><h2 id="我是二级"><a href="#我是二级" class="headerlink" title="我是二级"></a>我是二级</h2><h3 id="我是三级"><a href="#我是三级" class="headerlink" title="我是三级"></a>我是三级</h3><blockquote>
-<p>我是引入其他的资源</p>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">window.onunload = (e) =&gt; &#123;</span><br><span class="line">    logout();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">window.addEventListener(&quot;unload&quot;, (e) =&gt; &#123;</span><br><span class="line">    logout();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>基于以上两个方法就可以实现对页面关闭的时间监听，为了稳妥，可以两个事件都监听。然后对监听函数做处理，让关闭事件只调用一次。</p>
+<h3 id="请求发送"><a href="#请求发送" class="headerlink" title="请求发送"></a>请求发送</h3><h3 id="H5新特性Beacon-API方案"><a href="#H5新特性Beacon-API方案" class="headerlink" title="H5新特性Beacon API方案"></a>H5新特性Beacon API方案</h3><ul>
+<li><p>使用Blob来发送</p>
+</li>
+<li><p>使用FormData对象</p>
+</li>
+<li></li>
+</ul>
 
       
     </div>
@@ -609,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onbeforeunload-事件"><span class="nav-number">2.</span> <span class="nav-text">onbeforeunload 事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onunload-事件"><span class="nav-number">3.</span> <span class="nav-text">onunload 事件</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#我是一级"><span class="nav-number"></span> <span class="nav-text">我是一级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#我是二级"><span class="nav-number"></span> <span class="nav-text">我是二级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#我是三级"><span class="nav-number">1.</span> <span class="nav-text">我是三级</span></a></li></ol></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onbeforeunload-事件"><span class="nav-number">2.</span> <span class="nav-text">onbeforeunload 事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onunload-事件"><span class="nav-number">3.</span> <span class="nav-text">onunload 事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求发送"><span class="nav-number">4.</span> <span class="nav-text">请求发送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#H5新特性Beacon-API方案"><span class="nav-number">5.</span> <span class="nav-text">H5新特性Beacon API方案</span></a></li></ol></div>
             
 
           </div>
